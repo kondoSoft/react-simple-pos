@@ -32,7 +32,8 @@ var App = React.createClass({
     return{
       lang : {},
       fishes : {},
-      orders : {}
+      orders : {},
+      lang : {}
     }
   },
   componentDidMount :function(){
@@ -40,12 +41,11 @@ var App = React.createClass({
       context : this,
       state : 'fishes'
     })
-    lang = require('./lang-'+this.props.lang)
+    // lang = require('./lang-'+this.props.lang)
   },
   componentWillUpdate :function(nextProps, nextState){
 
     var item = ('order-' + this.props.params.storeId, JSON.stringify(nextState.order))
-    console.log(nextState.order)
     localStorage.setItem('order-' + this.props.params.storeId, JSON.stringify(nextState.order))
   },
   addFish : function(fish){
@@ -84,12 +84,7 @@ var Header = React.createClass({
   render : function(){
     return (
       <header className='top'>
-        <h1>Catch
-          <span className='ofThe'>
-            <span className='of'>of</span>
-            <span className='the'>the</span>
-          </span>
-          Day</h1>
+        <h1>Ferretería</h1>
         <h3 className='tagline'><span>{this.props.tagline}</span></h3>
       </header>
     )
@@ -170,16 +165,11 @@ var StorePiker = React.createClass({
       lang : require('./lang-en')
     }
   },
-  changeLanguage: function(language, e){
-    e.preventDefault()
-    lang = require('./lang-'+language+'')
-    this.setState({lang: require('./lang-'+language+'')})
-    console.log('You want to change the language to... '+ language)
-  },
   goToStore : function(event){
     event.preventDefault()
     var storeId = this.refs.storeId.value
-    browserHistory.push('/'+lang.lang+'/' + storeId)
+    var lang = this.refs.lang.value
+    browserHistory.push('/'+lang+'/' + storeId)
   },
   render : function(){
     return(
@@ -188,7 +178,13 @@ var StorePiker = React.createClass({
           <h2>{lang._pick_a_store}</h2>
           <input type='text' ref='storeId' defaultValue={h.getFunName()} required/>
           <button type='Submit'> {lang._go_to_store} </button>
-          <SelectLanguage changeLanguage={this.changeLanguage}/>
+
+          <div>
+            <select ref='lang'>
+              <option value='en'>English</option>
+              <option value='es'>Español</option>
+            </select>
+          </div>
         </form>
       </div>
 
